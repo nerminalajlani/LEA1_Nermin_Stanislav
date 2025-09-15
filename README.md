@@ -1,1 +1,1 @@
-# LEA1_Nermin_Stanislav
+# LEA_Nermin.Alajlani_Stanislav Kharchenko
