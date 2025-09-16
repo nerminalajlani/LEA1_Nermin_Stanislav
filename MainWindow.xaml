@@ -1,12 +1,55 @@
-﻿<Window x:Class="LEA_Nermin.Alajlani_Stanislav_Kharchenko.MainWindow"
+<Window x:Class="LEA_Nermin.Alajlani_Stanislav_Kharchenko.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LEA_Nermin.Alajlani_Stanislav_Kharchenko"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="470" Width="810">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Eingabefeld -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10"/>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Links: Ausgabefeld -->
+            <TextBox Grid.Column="0" Grid.Row="0" 
+                 Name="txtOutput"
+                 TextWrapping="Wrap" 
+                 VerticalScrollBarVisibility="Auto"
+                 AcceptsReturn="True"
+                 IsReadOnly="True" Height="334" VerticalAlignment="Top"/>
+
+            <!-- Rechts: Eingabefelder -->
+            <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,151,10,0" VerticalAlignment="Top">
+                <Label Content="port wählen"/>
+                <TextBox Name="txtPort"/>
+
+                <Label Content="benutzername"/>
+                <TextBox Name="txtUser"/>
+
+                <Label Content="Passwort"/>
+                <PasswordBox Name="txtPassword"/>
+            </StackPanel>
+
+
+        </Grid>
+        <TextBox x:Name="MessageInput" Margin="10,20,325,0" Grid.Row="1" />
+        <Button Content="Senden" Background="Gainsboro" Margin="480,20,220,0" Grid.Row="1" />
+        <Button Content="Geheim Senden"  RenderTransformOrigin="1.085,0.374" Background="Gainsboro" Margin="585,20,115,0" Grid.Row="1" />
+
     </Grid>
 </Window>
