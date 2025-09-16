@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Eingabefeld -->
+
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10"/>
         <Grid Margin="10">
             <Grid.ColumnDefinitions>
@@ -25,7 +25,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Links: Ausgabefeld -->
+
             <TextBox Grid.Column="0" Grid.Row="0" 
                  Name="txtOutput"
                  TextWrapping="Wrap" 
@@ -33,7 +33,7 @@
                  AcceptsReturn="True"
                  IsReadOnly="True" Height="334" VerticalAlignment="Top"/>
 
-            <!-- Rechts: Eingabefelder -->
+       
             <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,151,10,0" VerticalAlignment="Top">
                 <Label Content="port wählen"/>
                 <TextBox Name="txtPort"/>
@@ -53,3 +53,4 @@
 
     </Grid>
 </Window>
+
