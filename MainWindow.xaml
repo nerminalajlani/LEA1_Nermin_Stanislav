@@ -1,12 +1,85 @@
 ﻿<Window x:Class="LEA_Nermin.Alajlani_Stanislav_Kharchenko.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LEA_Nermin.Alajlani_Stanislav_Kharchenko"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="850">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Eingabefelder und Profil rechts -->
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- Links: Ausgabefeld -->
+            <ListBox x:Name="ChatList" Grid.Column="0"
+         Margin="0,0,10,0"
+         VerticalAlignment="Top"
+         Height="334"
+         BorderThickness="1"
+         BorderBrush="Gray">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#f1f1f1" CornerRadius="10" Padding="8" Margin="5">
+                            <StackPanel>
+                                <TextBlock Text="{Binding User}" 
+                               FontWeight="Bold" 
+                               Foreground="DarkBlue"/>
+                                <TextBlock Text="{Binding Text}" 
+                               TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- Rechts: Eingabefelder -->
+            <StackPanel Grid.Column="1" Margin="10,0,10,0" VerticalAlignment="Center" Height="334">
+                <!-- Profilbild -->
+                <Image Source="Profie.jpg" Height="100" Width="100" HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <Image.OpacityMask>
+                        <ImageBrush ImageSource="/Profie.jpg"/>
+                    </Image.OpacityMask>
+                </Image>
+
+                <Label Content="Port wählen"/>
+                <ComboBox Width="306"/>
+
+                <Label Content="Benutzername"/>
+                <TextBox Name="txtUser" ToolTip="Gib deinen Benutzernamen ein."/>
+
+                <Label/>
+                <PasswordBox Name="txtPassword" ToolTip="Gib dein Passwort ein."/>
+
+                <CheckBox Name="chkShowPassword" Content="Passwort anzeigen" Checked="chkShowPassword_Checked" Unchecked="chkShowPassword_Unchecked"/>
+                <TextBox Name="txtPasswordVisible" Visibility="Collapsed"/>
+            </StackPanel>
+            <Button x:Name="BtnLogin" Content="Anmelden" Click="BtnLogin_Click" ToolTip="Einloggen/Ausloggen" Margin="10,264,10,34" Grid.Column="1"/>
+        </Grid>
+
+        <!-- Nachrichteneingabe und Buttons -->
+        <Grid Grid.Row="1" Margin="10,20,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="MessageInput" Grid.Column="0" Text="Nachricht Schreiben ..." Margin="0,0,94,50" Grid.ColumnSpan="2" 
+                     TextChanged="MessageInput_TextChanged"
+                     GotFocus="MessageInput_GotFocus"
+                     LostFocus="MessageInput_LostFocus" />
+
+            <Button Content="Senden" Background="Gainsboro" Click="BtnSend_Click" ToolTip="Normale Nachricht senden" Grid.ColumnSpan="2" Margin="43,0,0,50" Grid.Column="1" HorizontalAlignment="Left" Width="119"/>
+            <Button Content="Geheim Senden" Grid.Column="2" Background="Gainsboro" Click="BtnSecretSend_Click" ToolTip="Verschlüsselte Nachricht senden" Margin="48,0,71,50" Grid.ColumnSpan="2"/>
+
+        </Grid>
+
     </Grid>
 </Window>
