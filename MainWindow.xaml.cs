@@ -154,6 +154,7 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
     }
 
     // Nachrichten-Klasse Test
+
     public class ChatMessage
     {
         public string User { get; set; }
