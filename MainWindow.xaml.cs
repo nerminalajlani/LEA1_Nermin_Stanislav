@@ -17,6 +17,10 @@ using System.IO;
 
 
 
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+
 namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
 {
     public partial class MainWindow : Window
@@ -24,6 +28,9 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
         private bool isLoggedIn = false;   // merkt sich, ob Login erfolgt ist
         private string savedUser = "";     // Benutzername speichern
         private string savedPassword = ""; // Passwort speichern
+
+        // Nachrichten-Sammlung (automatisch mit ListBox verbunden)
+        public ObservableCollection<ChatMessage> Messages { get; set; }
 
         public MainWindow()
         {
@@ -153,6 +160,13 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
         private void MessageInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Hier könntest du Live-Validierung machen, aktuell nicht nötig
-        }
+    }
+
+    // Nachrichten-Klasse Test
+
+    public class ChatMessage
+    {
+        public string User { get; set; }
+        public string Text { get; set; }
     }
 }
