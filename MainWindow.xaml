@@ -35,7 +35,7 @@
                 </Image>
 
                 <Label Content="Port wählen"/>
-                <ComboBox Width="306"/>
+                <ComboBox x:Name="COM" Width="306"/>
 
                 <Label Content="Benutzername"/>
                 <TextBox Name="txtUser" ToolTip="Gib deinen Benutzernamen ein."/>

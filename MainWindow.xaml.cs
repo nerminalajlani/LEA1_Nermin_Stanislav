@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows;
-using System.IO;
+using System.IO.Ports;
 
 
 
@@ -29,6 +29,9 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
         private string savedUser = "";     // Benutzername speichern
         private string savedPassword = ""; // Passwort speichern
 
+        SerialPort sp = new SerialPort();
+        string[] ports = SerialPort.GetPortNames();
+
         // Nachrichten-Sammlung (automatisch mit ListBox verbunden)
         public ObservableCollection<ChatMessage> Messages { get; set; }
 
@@ -36,6 +39,30 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
         {
             InitializeComponent();
             ToggleMessageControls(false); // Nachrichteneingabe & Buttons sperren
+            COM.ItemsSource = ports;
+            sp.DataReceived += new SerialDataReceivedEventHandler(DataReceived);
+        }
+
+        private void COM_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try 
+            {
+                if (!sp.IsOpen)
+                    sp.Close();
+                sp.PortName = COM.SelectedItem.ToString();
+                sp.BaudRate = 9600;
+                sp.Encoding = Encoding.UTF8;
+                sp.Open();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        void DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            Dispatcher.Invoke(() => txtOutput.Text += sp.ReadExisting());
         }
 
         // Login Button
@@ -160,13 +187,14 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
         private void MessageInput_TextChanged(object sender, TextChangedEventArgs e)
         {
             // Hier könntest du Live-Validierung machen, aktuell nicht nötig
-    }
+        }
 
-    // Nachrichten-Klasse Test
+        // Nachrichten-Klasse Test
 
-    public class ChatMessage
-    {
-        public string User { get; set; }
-        public string Text { get; set; }
+        public class ChatMessage
+        {
+            public string User { get; set; }
+            public string Text { get; set; }
+        }
     }
 }
