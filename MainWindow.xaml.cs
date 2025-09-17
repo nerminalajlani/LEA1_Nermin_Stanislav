@@ -13,77 +13,146 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows;
+using System.IO;
+
+
 
 namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
 {
     public partial class MainWindow : Window
     {
+        private bool isLoggedIn = false;   // merkt sich, ob Login erfolgt ist
+        private string savedUser = "";     // Benutzername speichern
+        private string savedPassword = ""; // Passwort speichern
+
         public MainWindow()
         {
             InitializeComponent();
+            ToggleMessageControls(false); // Nachrichteneingabe & Buttons sperren
         }
 
-        // Event-Handler für den "Senden"-Button
+        // Login Button
+        private void BtnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isLoggedIn)
+            {
+                string user = txtUser.Text;
+                string password = txtPassword.Password;
+
+                if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password))
+                {
+                    MessageBox.Show("Bitte Benutzername und Passwort eingeben!");
+                    return;
+                }
+
+                // Hier könntest du echte Prüfung einbauen (DB, Datei, etc.)
+                // Wir nehmen erstmal: Login akzeptieren & speichern
+                savedUser = user;
+                savedPassword = password;
+                isLoggedIn = true;
+
+                MessageBox.Show($"Willkommen {savedUser}!");
+                BtnLogin.Content = "Abmelden";
+
+                ToggleMessageControls(true); // Eingaben freigeben
+            }
+            else
+            {
+                // Logout
+                isLoggedIn = false;
+                BtnLogin.Content = "Anmelden";
+                MessageBox.Show("Du wurdest abgemeldet.");
+
+                ToggleMessageControls(false); // Eingaben sperren
+            }
+        }
+
+        // Nachrichten senden
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
-            if (ValidateLogin())
+            if (!isLoggedIn)
             {
-                string message = MessageInput.Text;
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    txtOutput.Text += $"[Normal]: {message}\n";
-                    MessageInput.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("Bitte geben Sie eine Nachricht ein.", "Hinweis", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                MessageBox.Show("Bitte zuerst einloggen!");
+                return;
+            }
+
+            string message = MessageInput.Text;
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                txtOutput.AppendText($"{savedUser}: {message}\n");
+                MessageInput.Clear();
             }
         }
 
-        // Event-Handler für den "Geheim Senden"-Button
+        // Geheim senden (z.B. einfach Text verschlüsseln -> hier Dummy)
         private void BtnSecretSend_Click(object sender, RoutedEventArgs e)
         {
-            if (ValidateLogin())
+            if (!isLoggedIn)
             {
-                string message = MessageInput.Text;
-                if (!string.IsNullOrWhiteSpace(message))
-                {
-                    string encryptedMessage = EncryptMessage(message);
-                    txtOutput.Text += $"[Geheim]: {encryptedMessage}\n";
-                    MessageInput.Clear();
-                }
-                else
-                {
-                    MessageBox.Show("Bitte geben Sie eine Nachricht ein.", "Hinweis", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                MessageBox.Show("Bitte zuerst einloggen!");
+                return;
+            }
+
+            string message = MessageInput.Text;
+            if (!string.IsNullOrWhiteSpace(message))
+            {
+                string geheim = ConvertToSecret(message);
+                txtOutput.AppendText($"{savedUser} (geheim): {geheim}\n");
+                MessageInput.Clear();
             }
         }
 
-        // Validierung der Login-Daten
-        private bool ValidateLogin()
+        // Dummy Verschlüsselung (kannst du anpassen)
+        private string ConvertToSecret(string input)
         {
-            string username = txtUser.Text;
-            string password = txtPassword.Password;
-
-            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
-            {
-                MessageBox.Show("Bitte geben Sie Benutzername und Passwort ein.", "Login erforderlich", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
-            }
-
-            return true;
+            char[] array = input.ToCharArray();
+            for (int i = 0; i < array.Length; i++)
+                array[i] = (char)(array[i] + 1); // einfacher Caesar-Shift
+            return new string(array);
         }
 
-        // Beispiel für eine einfache Verschlüsselungsmethode
-        private string EncryptMessage(string message)
+        // Passwort anzeigen/ausblenden
+        private void chkShowPassword_Checked(object sender, RoutedEventArgs e)
         {
-            char[] chars = message.ToCharArray();
-            for (int i = 0; i < chars.Length; i++)
+            txtPasswordVisible.Text = txtPassword.Password;
+            txtPasswordVisible.Visibility = Visibility.Visible;
+            txtPassword.Visibility = Visibility.Collapsed;
+        }
+
+        private void chkShowPassword_Unchecked(object sender, RoutedEventArgs e)
+        {
+            txtPassword.Password = txtPasswordVisible.Text;
+            txtPassword.Visibility = Visibility.Visible;
+            txtPasswordVisible.Visibility = Visibility.Collapsed;
+        }
+
+        // Eingabefelder sperren/freigeben
+        private void ToggleMessageControls(bool enabled)
+        {
+            MessageInput.IsEnabled = enabled;
+            foreach (var child in ((Grid)MessageInput.Parent).Children)
             {
-                chars[i] = (char)(chars[i] + 1); // Verschiebt jeden Buchstaben um 1
+                if (child is Button btn)
+                    btn.IsEnabled = enabled;
             }
-            return new string(chars);
+        }
+
+        // Placeholder-Logik für MessageInput
+        private void MessageInput_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (MessageInput.Text == "Nachricht Schreiben ...")
+                MessageInput.Text = "";
+        }
+
+        private void MessageInput_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(MessageInput.Text))
+                MessageInput.Text = "Nachricht Schreiben ...";
+        }
+
+        private void MessageInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Hier könntest du Live-Validierung machen, aktuell nicht nötig
         }
     }
 }
