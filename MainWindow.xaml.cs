@@ -43,13 +43,13 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
             sp.DataReceived += new SerialDataReceivedEventHandler(DataReceived);
         }
 
-        private void COM_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void COM_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            try 
+            try
             {
-                if (!sp.IsOpen)
+                if (sp.IsOpen)
                     sp.Close();
-                sp.PortName = COM.SelectedItem.ToString();
+                sp.PortName = COM.SelectedItem as string;
                 sp.BaudRate = 9600;
                 sp.Encoding = Encoding.UTF8;
                 sp.Open();
@@ -113,7 +113,8 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
             string message = MessageInput.Text;
             if (!string.IsNullOrWhiteSpace(message))
             {
-                txtOutput.AppendText($"{savedUser}: {message}\n");
+                sp.Write(txtUser.Text + ": " + MessageInput.Text + "\n");
+                txtOutput.Text += "Sie: " + MessageInput.Text + "\n";
                 MessageInput.Clear();
             }
         }
@@ -128,12 +129,13 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
             }
 
             string message = MessageInput.Text;
-            if (!string.IsNullOrWhiteSpace(message))
+            if (sp != null && sp.IsOpen)
             {
-                string geheim = ConvertToSecret(message);
-                txtOutput.AppendText($"{savedUser} (geheim): {geheim}\n");
-                MessageInput.Clear();
+                sp.Write($"{txtUser.Text} (geheim): {ConvertToSecret(message)}\n");
             }
+
+            txtOutput.AppendText($"Sie (geheim): {ConvertToSecret(message)}\n");
+            MessageInput.Clear();
         }
 
         // Dummy Verschlüsselung (kannst du anpassen)
