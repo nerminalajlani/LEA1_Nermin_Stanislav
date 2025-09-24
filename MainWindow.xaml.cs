@@ -25,6 +25,7 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
 {
     public partial class MainWindow : Window
     {
+        private bool isDecryptMode = false;  // true = Nachricht entschlüsseln, false = Nachricht verschlüsseln
         private bool isLoggedIn = false;   // merkt sich, ob Login erfolgt ist
         private string savedUser = "";     // Benutzername speichern
         private string savedPassword = ""; // Passwort speichern
@@ -128,43 +129,87 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
                 return;
             }
 
-            string message = MessageInput.Text;
-            string encrypted = Atbash(message);
+            string message = MessageInput.Text.Trim();
 
-            if (sp != null && sp.IsOpen)
+            // Wenn etwas eingegeben wurde, dann verschlüsseln und senden
+            if (!string.IsNullOrEmpty(message))
             {
-                sp.Write($"{txtUser.Text} (geheim): {encrypted}\n");
-            }
+                string geheim = Atbash(message);
 
-            txtOutput.AppendText($"Sie (geheim): {encrypted}\n");
-            MessageInput.Clear();
+                if (sp != null && sp.IsOpen)
+                {
+                    sp.Write($"{txtUser.Text} (geheim): {geheim}\n");
+                }
+
+                txtOutput.AppendText($"Sie (geheim): {geheim}\n");
+                MessageInput.Clear();
+            }
+            else
+            {
+                // Kein neuer Text eingegeben – versuchen, die letzte geheime Nachricht zu entschlüsseln
+                var letzteGeheime = txtOutput.Text.Split('\n')
+                                        .LastOrDefault(line => line.Contains("(geheim):"));
+
+                if (letzteGeheime == null)
+                {
+                    MessageBox.Show("Keine geheime Nachricht zum Entschlüsseln gefunden.");
+                    return;
+                }
+
+                // Extrahiere den verschlüsselten Text
+                string verschluesselt = letzteGeheime.Split(new[] { "(geheim):" }, StringSplitOptions.None)[1].Trim();
+
+                // Passwortfenster öffnen
+                PasswordPrompt prompt = new PasswordPrompt();
+                prompt.Owner = this;
+
+                if (prompt.ShowDialog() == true)
+                {
+                    string eingegebenesPasswort = prompt.Password;
+
+                    if (eingegebenesPasswort == savedPassword)
+                    {
+                        string entschluesselt = Atbash(verschluesselt);
+                        MessageBox.Show($"🔓 Entschlüsselte Nachricht:\n{entschluesselt}", "Entschlüsselt");
+                    }
+                    else
+                    {
+                        MessageBox.Show("❌ Falsches Passwort!", "Zugriff verweigert");
+                    }
+                }
+            }
         }
 
         // Diese Methode implementiert die Atbash-Verschlüsselung.
         private string Atbash(string input)
         {
-            char[] result = new char[input.Length];
+            char[] array = input.ToCharArray();
 
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
-                char c = input[i];
+                char c = array[i];
 
-                if (char.IsUpper(c))
+                // Buchstaben (Großbuchstaben)
+                if (c >= 'A' && c <= 'Z')
                 {
-                    result[i] = (char)('Z' - (c - 'A'));
+                    array[i] = (char)('Z' - (c - 'A'));
                 }
-                else if (char.IsLower(c))
+                // Buchstaben (Kleinbuchstaben)
+                else if (c >= 'a' && c <= 'z')
                 {
-                    result[i] = (char)('z' - (c - 'a'));
+                    array[i] = (char)('z' - (c - 'a'));
                 }
-                else
+                // Ziffern
+                else if (c >= '0' && c <= '9')
                 {
-                    result[i] = c;
+                    array[i] = (char)('9' - (c - '0'));
                 }
+                // Sonstige Zeichen bleiben gleich
             }
 
-            return new string(result);
+            return new string(array);
         }
+
 
 
         // Passwort anzeigen/ausblenden
