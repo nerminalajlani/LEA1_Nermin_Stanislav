@@ -129,23 +129,43 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
             }
 
             string message = MessageInput.Text;
+            string encrypted = Atbash(message);
+
             if (sp != null && sp.IsOpen)
             {
-                sp.Write($"{txtUser.Text} (geheim): {ConvertToSecret(message)}\n");
+                sp.Write($"{txtUser.Text} (geheim): {encrypted}\n");
             }
 
-            txtOutput.AppendText($"Sie (geheim): {ConvertToSecret(message)}\n");
+            txtOutput.AppendText($"Sie (geheim): {encrypted}\n");
             MessageInput.Clear();
         }
 
-        // Dummy Verschlüsselung (kannst du anpassen)
-        private string ConvertToSecret(string input)
+        // Diese Methode implementiert die Atbash-Verschlüsselung.
+        private string Atbash(string input)
         {
-            char[] array = input.ToCharArray();
-            for (int i = 0; i < array.Length; i++)
-                array[i] = (char)(array[i] + 1); // einfacher Caesar-Shift
-            return new string(array);
+            char[] result = new char[input.Length];
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                char c = input[i];
+
+                if (char.IsUpper(c))
+                {
+                    result[i] = (char)('Z' - (c - 'A'));
+                }
+                else if (char.IsLower(c))
+                {
+                    result[i] = (char)('z' - (c - 'a'));
+                }
+                else
+                {
+                    result[i] = c;
+                }
+            }
+
+            return new string(result);
         }
+
 
         // Passwort anzeigen/ausblenden
         private void chkShowPassword_Checked(object sender, RoutedEventArgs e)
