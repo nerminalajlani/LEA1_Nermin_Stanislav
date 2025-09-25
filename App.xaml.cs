@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
+namespace LEA_Nermin_Alajlani_Stanislav_Kharchenko
 {
     /// <summary>
     /// Interaktionslogik für "App.xaml"

@@ -21,7 +21,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
+namespace LEA_Nermin_Alajlani_Stanislav_Kharchenko
 {
     public partial class MainWindow : Window
     {

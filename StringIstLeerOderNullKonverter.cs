@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko
+namespace LEA_Nermin_Alajlani_Stanislav_Kharchenko
 {
     public class StringIstLeerOderNullKonverter : IValueConverter
     {

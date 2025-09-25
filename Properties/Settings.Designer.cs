@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko.Properties
+namespace LEA_Nermin_Alajlani_Stanislav_Kharchenko.Properties
 {
 
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko.Properties
+namespace LEA_Nermin_Alajlani_Stanislav_Kharchenko.Properties
 {
 
 
@@ -44,7 +44,7 @@ namespace LEA_Nermin.Alajlani_Stanislav_Kharchenko.Properties
             {
                 if ((resourceMan == null))
                 {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LEA_Nermin.Alajlani_Stanislav_Kharchenko.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("LEA_Nermin_Alajlani_Stanislav_Kharchenko.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
